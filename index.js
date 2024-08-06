@@ -27,12 +27,13 @@ async function run() {
     client.connect();
 
     const blogsCollection = client.db("blogging_DB").collection("blogs");
-    const blogSaveCollection = client.db("blogging_DB").collection("favorite");
     const usersCollection = client.db("blogging_DB").collection("users");
+    const SaveBlogCollection = client.db("blogging_DB").collection("save");
+    const favoriteBlogCollection = client.db("blogging_DB").collection("favorite");
 
 
     /*==================================================
-              Blog data get
+              Blog api
       ================================================== */
     app.get('/blogs', async (req,res)=>{
        const result = await blogsCollection.find().toArray();
@@ -47,16 +48,36 @@ async function run() {
     })
 
     /*==================================================
-              All User
+              All User api
       ================================================== */
     app.get('/users', async (req,res)=>{
         const users = await usersCollection.find().toArray();
         res.send(users);
     })
     
+    app.post('/user', async (req,res)=>{
+       const user = req.body;
+       const query = { email: user.email};
+       const existingUser = await usersCollection.findOne(query);
+       if(existingUser){
+        return res.send({message:"User already existes"});
+       }
+       const result = await usersCollection.insertOne({...user,role:"User"});
+       res.send(result);
+    })
+    /*==================================================
+            Save blog api
+    ================================================== */
+    app.get('/save/:email',async (req,res)=>{
 
+    })
 
-
+    /*==================================================
+            Favorite blog api
+    ================================================== */
+    app.get('/favorite/:email',async (req,res)=>{
+      
+    })
 
 
 
