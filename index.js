@@ -75,6 +75,12 @@ async function run() {
     /*==================================================
             Favorite blog api
     ================================================== */
+    app.post('/favorite',async (req,res)=>{
+        const blog = req.body;
+        const result = await favoriteBlogCollection.insertOne(blog);
+        res.send(result);
+    })
+    
     app.get('/favorite/:email',async (req,res)=>{
       
     })
