@@ -80,7 +80,12 @@ async function run() {
         const result = await favoriteBlogCollection.insertOne(blog);
         res.send(result);
     })
-    
+
+    app.get('/favorite',async (req,res)=>{
+      const result = await favoriteBlogCollection.find().toArray();
+      res.send(result);
+    })
+
     app.get('/favorite/:email',async (req,res)=>{
       
     })
