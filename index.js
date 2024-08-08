@@ -86,9 +86,16 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/favorite/:email',async (req,res)=>{
-      
+    app.get('/favorite-blog', async (req,res)=>{
+        const email = req.query.email;
+        if(!email){
+          res.send([]);
+        }
+        const query = { user_email: email};
+        const result = await favoriteBlogCollection.find(query).toArray();
+        res.send(result);
     })
+
 
 
 
