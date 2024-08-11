@@ -68,9 +68,26 @@ async function run() {
     /*==================================================
             Save blog api
     ================================================== */
-    app.get('/save/:email',async (req,res)=>{
-
+    app.post('/save',async (req,res)=>{
+      const blog = req.body;
+      const result = await SaveBlogCollection.insertOne(blog);
+      res.send(result);
     })
+
+    app.get('/save',async (req,res)=>{
+      const result = await SaveBlogCollection.find().toArray();
+      res.send(result);
+    })
+
+    app.get('/save-blog', async (req,res)=>{
+        const email = req.query.email;
+        if(!email){
+          res.send([]);
+        }
+        const query = { user_email: email};
+        const result = await SaveBlogCollection.find(query).toArray();
+        res.send(result);
+      })
 
     /*==================================================
             Favorite blog api
