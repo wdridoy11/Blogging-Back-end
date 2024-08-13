@@ -28,7 +28,7 @@ async function run() {
 
     const blogsCollection = client.db("blogging_DB").collection("blogs");
     const usersCollection = client.db("blogging_DB").collection("users");
-    const SaveBlogCollection = client.db("blogging_DB").collection("save");
+    const saveBlogCollection = client.db("blogging_DB").collection("save");
     const favoriteBlogCollection = client.db("blogging_DB").collection("favorite");
 
 
@@ -70,12 +70,12 @@ async function run() {
     ================================================== */
     app.post('/save',async (req,res)=>{
       const blog = req.body;
-      const result = await SaveBlogCollection.insertOne(blog);
+      const result = await saveBlogCollection.insertOne(blog);
       res.send(result);
     })
 
     app.get('/save',async (req,res)=>{
-      const result = await SaveBlogCollection.find().toArray();
+      const result = await saveBlogCollection.find().toArray();
       res.send(result);
     })
 
@@ -85,9 +85,17 @@ async function run() {
           res.send([]);
         }
         const query = { user_email: email};
-        const result = await SaveBlogCollection.find(query).toArray();
+        const result = await saveBlogCollection.find(query).toArray();
         res.send(result);
       })
+
+    app.delete('/save-blog/:id', async (req, res) => {
+      const id = req.params.id;
+      const blog_id = id;
+      const filter = { blog_id };
+      const result = await saveBlogCollection.deleteOne(filter);
+      res.send(result);
+    })
 
     /*==================================================
             Favorite blog api
@@ -114,13 +122,12 @@ async function run() {
     })
 
     app.delete('/favorite-blog/:id', async (req,res)=>{
-        const id = req.params.id;
-        const filter = { _id : new ObjectId(id)};
-        const result = await favoriteBlogCollection.deleteOne(filter);
-        res.send(result);
+      const id = req.params.id;
+      const blog_id = id;
+      const filter = { blog_id };
+      const result = await favoriteBlogCollection.deleteOne(filter);
+      res.send(result);
     })
-
-
 
 
 
