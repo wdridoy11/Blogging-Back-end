@@ -30,6 +30,9 @@ async function run() {
     const usersCollection = client.db("blogging_DB").collection("users");
     const saveBlogCollection = client.db("blogging_DB").collection("save");
     const favoriteBlogCollection = client.db("blogging_DB").collection("favorite");
+    const BlogCommentCollection = client.db("blogging_DB").collection("comment");
+    const BlogLikeCollection = client.db("blogging_DB").collection("like");
+
 
 
     /*==================================================
@@ -129,6 +132,33 @@ async function run() {
       res.send(result);
     })
 
+    /*==================================================
+            comment api
+    ================================================== */ 
+    app.post('/comment',async (req,res)=>{
+      const comment = req.body;
+      const result = await BlogCommentCollection.insertOne(comment);
+      res.send(result);
+    })
+    
+    app.get('/comment',async (req,res)=>{
+      const result = await BlogCommentCollection.find().toArray();
+      res.send(result);
+    })
+
+    /*==================================================
+            Like api
+    ================================================== */ 
+    app.post('/like',async (req,res)=>{
+      const comment = req.body;
+      const result = await BlogLikeCollection.insertOne(comment);
+      res.send(result);
+    })
+
+    app.get('/like',async (req,res)=>{
+      const result = await BlogLikeCollection.find().toArray();
+      res.send(result);
+    })
 
 
 
